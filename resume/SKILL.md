@@ -11,12 +11,16 @@ Do not run this skill's steps from memory of what it says below once invoked in 
 
 **This is a state-recovery pass, not a fresh investigation.** Its job is to reconstruct accurate context from durable artifacts that already exist — a project's own session/state record, its handover artifact if it has one, live git state, and any still-running background agents — not to re-derive conclusions those artifacts already recorded, and not to re-audit work that was already independently verified and committed. If a step below tempts you into re-running full test suites or re-litigating a closed decision, stop; that belongs to whatever task comes after resume, not to resume itself.
 
-## 1. Re-ground in this project's own governing requirements, don't assume them from memory
+## 1. Re-ground in this project's own governing requirements, and the entire framework they sit on — don't assume either from memory or from one rules file alone
 
-A compaction can lose track of project-specific governance or process rules just as easily as ordinary state. Look for, and read fresh:
+A compaction can lose track of project-specific governance or process rules just as easily as ordinary state, and re-reading only a single top-level rules document is not equivalent to re-reading the governing framework as a whole — confirmed necessary by a real incident: an earlier version of this step named only one numbered-rules file, and a session that followed it exactly still turned out never to have read the framework's own designated entry point or most of its substantive content, for an entire session, until the author asked directly whether that reread had actually happened. Look for, and read fresh:
 
-- Any documented governing-rules or process-framework file this project has adopted (a constitution, a contributor/process guide, a numbered rules document) — a rule may have been added or amended in a part of the conversation the summary compressed away. If this project has none, skip ahead.
-- Any project-specific extension or profile layer on top of a shared/portable framework, if this project's own setup has one (e.g. a local overlay of rules/conventions distinct from an upstream shared framework it's built on). Skipping this means operating on a framework's generic defaults instead of this project's own actual current rules.
+- If this project's governing framework designates its own required entry point or reading sequence (a `START_HERE`-style file, an onboarding guide that says "read this first, in full"), read that file itself and then literally follow the sequence it lays out — do not substitute a top-level README or a single rules file for it, and do not stop partway once the early files start to feel familiar.
+- Beyond that named sequence, traverse and internalize the rest of the framework's substantive normative content — its governance/process/policy directories, role or authority guides, planning and validation protocols, and any other directory holding standing rules rather than scaffolding. Skip generated artifacts, templates, fixtures, schemas, test/tooling scaffolding, and versioned historical release notes/snapshots — those are not standing governance to re-internalize each time.
+- Any documented governing-rules or process-framework file this project has adopted (a constitution, a contributor/process guide, a numbered rules document) — a rule may have been added or amended in a part of the conversation the summary compressed away.
+- Any project-specific extension or profile layer on top of a shared/portable framework, if this project's own setup has one (e.g. a local overlay of rules/conventions distinct from an upstream shared framework it's built on) — read every file that layer points to, not only its own index/README. Skipping this means operating on a framework's generic defaults instead of this project's own actual current rules.
+
+If this project has no formal governing framework at all, skip ahead — this step exists to prevent a shallow reread of one that does, not to invent process where none exists.
 
 ## 2. Read the designed bootstrap artifact, if this project has one
 
