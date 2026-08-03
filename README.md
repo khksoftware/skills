@@ -48,13 +48,34 @@ If a project maintains its own project-specific, non-generic variant of either s
 
 ## Installing into a project
 
-Both skills must live under the **primary working directory's** `.claude/skills/` to be invocable as `/prepare-compact` and `/resume` — Claude Code does not scan `.claude/skills/` in additional working directories for slash-command registration. To use them in a given repository:
+This folder — wherever you clone or check it out to — is the single git-tracked master copy of these skills. A consuming repository never edits its own copy directly; it receives a synced copy (or symlink) generated from here, and stays current by re-running the sync script after something changes in this folder.
+
+Two tools discover skills this way, using the same walk-up convention on different directory names:
+
+- **Claude Code** looks for `<name>/SKILL.md` under `.claude/skills/`, searched from the current working directory up to the repository root, plus a personal `~/.claude/skills/`.
+- **Codex** looks for `<name>/SKILL.md` under `.agents/skills/`, searched the same way — from the current working directory up to the repository root, plus a personal `$HOME/.agents/skills/` (it also checks an admin-installed system location and its own built-in skills, neither relevant here).
+
+### Using `sync_into_repo.py`
+
+Run the sync script included in this folder against any target repository:
 
 ```text
-<repo>/.claude/skills/prepare-compact/SKILL.md
-<repo>/.claude/skills/resume/SKILL.md
+python <path-to-this-folder>/sync_into_repo.py --target <repo-root>
 ```
 
-If you work across multiple repositories or working-directory setups, keep a copy in each one's own `.claude/skills/`, and update every copy when either file changes here. A newly added or edited skill file also typically requires a fresh Claude Code session before it's picked up.
+This regenerates, under `<repo-root>`:
 
-`.claude/` is commonly gitignored, so copies placed there are not necessarily durable or version-controlled on their own.
+```text
+<repo-root>/.claude/skills/prepare-compact/
+<repo-root>/.claude/skills/resume/
+<repo-root>/.agents/skills/prepare-compact/
+<repo-root>/.agents/skills/resume/
+```
+
+Pass `--target` more than once to sync several repositories in one run, and add `--check` to preview what would change without writing anything — useful before a real run, or in CI to catch drift.
+
+For each skill and each destination, the script first attempts a real OS symlink back to this folder's own copy, so an edit made here is reflected in the target immediately with nothing further to run. If the operating system or filesystem doesn't permit symlinks (for example, Windows without administrator rights or Developer Mode enabled), the script transparently falls back to a recursive copy instead. A copy is a snapshot, not a live view — it will not pick up later edits on its own, so re-run the script after changing `prepare-compact/SKILL.md` or `resume/SKILL.md` here to refresh any copy-mode destinations. The script's report states which mode (`symlink` or `copy`) was actually used for each entry, a run with nothing left to do writes nothing further, and any skill this folder used to publish but no longer does gets cleaned up from a target's `.claude/skills/` and `.agents/skills/` on the next real run, without touching anything else already present there.
+
+`.claude/` and `.agents/` are commonly gitignored in a consuming repository, so synced copies placed there are not necessarily durable or version-controlled on their own — this folder remains the durable, version-controlled source of truth; treat everything `sync_into_repo.py` writes elsewhere as disposable, regenerable output.
+
+A newly synced or edited skill file also typically requires a fresh Claude Code (or Codex) session before it's picked up.
