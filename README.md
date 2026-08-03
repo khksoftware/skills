@@ -57,4 +57,4 @@ Both skills must live under the **primary working directory's** `.claude/skills/
 
 If you work across multiple repositories or working-directory setups, keep a copy in each one's own `.claude/skills/`, and update every copy when either file changes here. A newly added or edited skill file also typically requires a fresh Claude Code session before it's picked up.
 
-`.claude/` is commonly gitignored, so copies placed there are not necessarily durable or version-controlled on their own — this directory (`f:\Personal\Alex\Dev\Editorial\skills\`) is the tracked source of truth these copies are adapted from.
+`.claude/` is commonly gitignored, so copies placed there are not necessarily durable or version-controlled on their own.
